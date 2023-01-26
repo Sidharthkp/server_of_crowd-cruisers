@@ -24,6 +24,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 app.use("/api/pins", pinRoute)
 
+
 app.listen(3000, () => {
     console.log("Server has started at 3000");
 })
