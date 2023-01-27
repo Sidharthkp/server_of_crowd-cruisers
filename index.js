@@ -12,6 +12,8 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
+let users = [];
+
 //Add this before the app.get() block
 socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
@@ -19,10 +21,27 @@ socketIO.on('connection', (socket) => {
     //sends the message to all the users on the server
     socket.on('message', (data) => {
         socketIO.emit('messageResponse', data);
+        //Adds the new user to the list of users
+        console.log(data.name);
+        users.push(data.name);
+        // console.log(users);
+        //Sends the list of users to the client
+        socketIO.emit('newUserResponse', users);
+    });
+
+    //Listens when a new user joins the server
+    socket.on('email', (data) => {
+        
     });
 
     socket.on('disconnect', () => {
         console.log('😪: A user disconnected');
+        //Updates the list of users when a user disconnects from the server
+        users = users.filter((user) => user.socketID !== socket.id);
+        // console.log(users);
+        //Sends the list of users to the client
+        socketIO.emit('newUserResponse', users);
+        socket.disconnect();
     });
 });
 
