@@ -29,10 +29,7 @@ socketIO.on('connection', (socket) => {
         socketIO.emit('newUserResponse', users);
     });
 
-    //Listens when a new user joins the server
-    socket.on('email', (data) => {
-        
-    });
+    socket.on('typing', (data) => socket.broadcast.emit('typingResponse', data));
 
     socket.on('disconnect', () => {
         console.log('😪: A user disconnected');
