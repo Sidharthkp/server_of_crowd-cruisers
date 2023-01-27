@@ -37,7 +37,7 @@ socketIO.on('connection', (socket) => {
             text: data.text
          });
          await saveMsg.save().then(()=>{
-            console.log("Message saved in db");
+            console.log("🐱‍🏍:Message saved in db");
          }).catch((err)=>{
             console.log(err);
          })
