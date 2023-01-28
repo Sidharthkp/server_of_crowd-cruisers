@@ -8,6 +8,15 @@ const http = require('http').Server(app);
 
 const mongoSaveMessage = require('./models/Messages');
 
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    credentials: true,            //access-control-allow-credentials:true
+    optionSuccessStatus: 200
+}
+app.use(cors(corsOptions));
+
+dotenv.config()
+
 const CHAT_BOT = 'ChatBot';
 
 const socketIO = require('socket.io')(http, {
@@ -81,14 +90,6 @@ socketIO.on('connection', (socket) => {
 
 });
 
-const corsOptions = {
-    origin: 'http://localhost:5173',
-    credentials: true,            //access-control-allow-credentials:true
-    optionSuccessStatus: 200
-}
-app.use(cors(corsOptions));
-
-dotenv.config()
 
 app.use(express.json())
 
