@@ -88,7 +88,6 @@ router.use("/image", (req, res) => {
 // router.use("/", require("express").static(path.join(__dirname, "./public/Images")));
 
 router.get("/", (req, res) => {
-    console.log("Reached here");
     Posts.find()
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
