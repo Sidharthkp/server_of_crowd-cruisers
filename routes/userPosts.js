@@ -13,10 +13,10 @@ const fileFilter = (req, file, cb) => {
 };
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "../public/Images");
+    destination: (req, file, cb) => {
+        cb(null, "./public/Images");
     },
-    filename: function (req, file, cb) {
+    filename: (req, file, cb) => {
         cb(
             null,
             new Date().toISOString().replace(/:/g, "-") + file.originalname
@@ -43,7 +43,7 @@ router.post("/post", upload.single("postImage"), async (req, res) => {
     console.log(req.file);
     const post = new Posts({
         description: req.body.description,
-        postImage: req.file,
+        image: req.file.path,
     });
 
     try {
