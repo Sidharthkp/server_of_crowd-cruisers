@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const app = express()
 const pinRoute = require("./routes/mapPins")
+const postRoute = require("./routes/userPosts")
 const cors = require('cors');
 const http = require('http').Server(app);
 
@@ -100,6 +101,8 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
 });
 
 app.use("/api/pins", pinRoute)
+
+app.use("/api/userPosts", postRoute)
 
 
 http.listen(3000, () => {
