@@ -7,7 +7,7 @@ const postRoute = require("./routes/userPosts")
 const cors = require('cors');
 const http = require('http').Server(app);
 
-const mongoSaveMessage = require('./models/Messages');
+const Messages = require('./models/Messages');
 
 const corsOptions = {
     origin: 'http://localhost:5173',
@@ -42,15 +42,15 @@ socketIO.on('connection', (socket) => {
         // console.log(users);
         //Sends the list of users to the client
         socketIO.emit('newUserResponse', users);
-        const saveMsg = new mongoSaveMessage({ 
+        const saveMsg = new Messages({
             name: data.name,
             text: data.text
-         });
-         await saveMsg.save().then(()=>{
+        });
+        await saveMsg.save().then(() => {
             console.log("🐱‍🏍:Message saved in db");
-         }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
-         })
+        })
     });
 
     socket.on('typing', (data) => socket.broadcast.emit('typingResponse', data));

@@ -1,28 +1,12 @@
-const router = require("express").Router();
+//js
+const express = require('express');
 
-const Pin = require("../models/MapPin");
+const { getPin, newPin } = require('../controllers/mapController');
 
-//create a pin
+const router = express.Router();
 
-router.post("/", async (req, res) => {
-    const newPin = new Pin(req.body);
-    try {
-        const savedPin = await newPin.save();
-        res.status(200).json(savedPin);
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
+router.get('/', getPin);
 
-//get all pins
+router.post('/', newPin);
 
-router.get("/", async (req, res) => {
-    try {
-        const pins = await Pin.find();
-        res.status(200).json(pins)
-    } catch (err) {
-        res.status(500).json(err)
-    }
-})
-
-module.exports = router
+module.exports = router;
