@@ -24,4 +24,7 @@ const MapSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-module.exports = mongoose.model("Map", MapSchema);
+
+const Map = mongoose.model("Map", MapSchema);
+
+module.exports = Map;
