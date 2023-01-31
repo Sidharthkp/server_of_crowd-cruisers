@@ -12,5 +12,3 @@ router.get("/", getImage);
 router.post("/post", single, postImages);
 
 module.exports = router;
-
-module.exports = router;

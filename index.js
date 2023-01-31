@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const app = express()
 const pinRoute = require("./routes/mapPins")
 const postRoute = require("./routes/userPosts")
+const groupRoute = require("./routes/createGroup")
 const cors = require('cors');
 const http = require('http').Server(app);
 
@@ -24,6 +25,8 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
+let users = [];
+
 //Add this before the app.get() block
 socketIO.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
@@ -36,6 +39,7 @@ socketIO.on('connection', (socket) => {
         // console.log(users);
         //Sends the list of users to the client
         socketIO.emit('newUserResponse', users);
+
         const saveMsg = new Messages({
             name: data.name,
             text: data.text
@@ -58,7 +62,6 @@ socketIO.on('connection', (socket) => {
         socketIO.emit('newUserResponse', users);
         socket.disconnect();
     });
-
 });
 
 
@@ -74,6 +77,7 @@ app.use("/api/pins", pinRoute)
 
 app.use("/api/userPosts", postRoute)
 
+app.use("/api/createGroup", groupRoute)
 
 http.listen(3000, () => {
     console.log("Server has started at 3000");
