@@ -14,6 +14,13 @@ const newGroup = async (req, res) => {
     }
 }
 
+const getGroups = (req, res) => {
+    Group.find()
+        .then((groups) => res.json(groups))
+        .catch((err) => res.json({ error: "could not get groups", err }));
+}
+
 module.exports = {
-    newGroup
+    newGroup,
+    getGroups
 }
