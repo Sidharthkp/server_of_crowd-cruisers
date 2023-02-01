@@ -13,6 +13,10 @@ const GroupSchema = new mongoose.Schema({
 
     members: {
         type: [String],
+    },
+
+    image: {
+        type: [String]
     }
 })
 

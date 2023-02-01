@@ -33,7 +33,7 @@ socketIO.on('connection', (socket) => {
 
     //sends the message to all the users on the server
     socket.on('message', async (data) => {
-        socketIO.emit('messageResponse', data);
+        // socketIO.emit('messageResponse', data);
         //Adds the new user to the list of users
         users.push(data.name);
         // console.log(users);
