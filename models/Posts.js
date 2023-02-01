@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const PostsSchema = new mongoose.Schema({
     description: {
@@ -7,6 +8,10 @@ const PostsSchema = new mongoose.Schema({
     },
     image: {
         type: [String]
+    },
+    group: {
+        type: ObjectId,
+        ref: "Group"
     }
 }, { timestamps: true })
 

@@ -97,6 +97,7 @@ const postImages = async (req, res) => {
     const post = new Posts({
         description: req.body.description,
         image: req.file.path,
+        group: req.body.details
     });
 
     try {
