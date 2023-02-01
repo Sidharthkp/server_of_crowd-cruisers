@@ -14,7 +14,7 @@ const MessageSchema = new mongoose.Schema({
     },
 
     group: {
-        type: [ObjectId],
+        type: ObjectId,
         ref: "Group"
     }
 })

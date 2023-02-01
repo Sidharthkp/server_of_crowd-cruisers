@@ -42,7 +42,8 @@ socketIO.on('connection', (socket) => {
 
         const saveMsg = new Messages({
             name: data.name,
-            text: data.text
+            text: data.text,
+            group: data.groupId
         });
         await saveMsg.save().then(() => {
             console.log("🐱‍🏍:Message saved in db");
