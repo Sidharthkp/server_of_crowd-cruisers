@@ -20,7 +20,22 @@ const getGroups = (req, res) => {
         .catch((err) => res.json({ error: "could not get groups", err }));
 }
 
+const joinGroup = async (req, res) => {
+    try {
+        const groups = await Group.findOneAndUpdate({_id: req.body.selection}, {
+            $push: {
+                members: req.body.username
+            }
+        })
+        await groups.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could notjoin group", err }));
+        
+    } catch {
+        res.status(400).json({ error: "could not join group", err });
+    }
+}
+
 module.exports = {
     newGroup,
-    getGroups
+    getGroups,
+    joinGroup
 }
