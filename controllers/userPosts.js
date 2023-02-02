@@ -10,6 +10,7 @@ const path = require("path");
 const multer = require("multer");
 const Ride = require("../models/Rides");
 const Event = require("../models/Events");
+const WhishList = require("../models/WishList");
 
 
 //Filtering the file
@@ -137,10 +138,23 @@ const regsiterUser = async (req, res) => {
     }
 }
 
+const wishList = async (req, res) => {
+    try {
+        const wishList = new WhishList({
+            userName: req.body.userName,
+            eventId: req.body.id
+        })
+        await wishList.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
+    } catch (err) {
+        res.status(400).json({ error: "could not save items", err });
+    }
+}
+
 module.exports = {
     image,
     postImages,
     single,
     getImage,
-    regsiterUser
+    regsiterUser,
+    wishList
 }
