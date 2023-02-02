@@ -12,6 +12,9 @@ const PostsSchema = new mongoose.Schema({
     group: {
         type: ObjectId,
         ref: "Group"
+    },
+    eventType: {
+        type: String,
     }
 }, { timestamps: true })
 
