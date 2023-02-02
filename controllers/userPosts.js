@@ -119,19 +119,46 @@ const getImage = (req, res) => {
 
 const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
+    const wish = await WhishList.findOne({ userName: req.body.username })
     try {
-        if (post.eventType == "ride") {
-            const rideJoin = new Ride({
-                userName: req.body.username,
-                rideId: req.body.id
-            })
-            await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+        if (!wish) {
+            if (post.eventType == "ride") {
+                const rideJoin = new Ride({
+                    userName: req.body.username,
+                    rideId: req.body.id
+                })
+                await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+            } else {
+                const eventJoin = new Event({
+                    userName: req.body.username,
+                    eventId: req.body.id
+                })
+                await eventJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+            }
         } else {
-            const eventJoin = new Event({
-                userName: req.body.username,
-                eventId: req.body.id
-            })
-            await eventJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+            if (post.eventType == "ride") {
+                const rideJoin = new Ride({
+                    userName: req.body.username,
+                    rideId: req.body.id
+                })
+                rideJoin.save()
+                    .then(async (added) => {
+                        await WhishList.findOneAndDelete({ eventId: req.body.id })
+                        res.json(added)
+                    })
+                    .catch((err) => res.json({ error: "could not join ride", err }));
+            } else {
+                const eventJoin = new Event({
+                    userName: req.body.username,
+                    eventId: req.body.id
+                })
+                eventJoin.save()
+                    .then(async (added) => {
+                        await WhishList.findOneAndDelete({ eventId: req.body.id })
+                        res.json(added)
+                    })
+                    .catch((err) => res.json({ error: "could not join ride", err }));
+            }
         }
     } catch (err) {
         res.status(400).json({ error: "could not join event/ride", err });
