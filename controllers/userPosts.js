@@ -120,20 +120,27 @@ const getImage = (req, res) => {
 const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
+    const rideCheck = await Ride.find({userName: req.body.username, rideId: req.body.id})
+    const eventCheck = await Event.find({userName: req.body.username, eventId: req.body.id})
+    console.log(rideCheck)
+    console.log(eventCheck)
     try {
         if (!wish) {
-            if (post.eventType == "ride") {
+            if (post.eventType == "ride" && rideCheck.length == 0) {
                 const rideJoin = new Ride({
                     userName: req.body.username,
                     rideId: req.body.id
                 })
                 await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
-            } else {
+            } else if (post.eventType == "event" && eventCheck.length == 0) {
                 const eventJoin = new Event({
                     userName: req.body.username,
                     eventId: req.body.id
                 })
                 await eventJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+            } else {
+                console.log("REched bad");
+                res.json({ error: "could not join ride", err });
             }
         } else {
             if (post.eventType == "ride") {
