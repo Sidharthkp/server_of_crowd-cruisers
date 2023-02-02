@@ -8,7 +8,7 @@ const RideSchema = new mongoose.Schema({
     },
     rideId: {
         type: ObjectId,
-        ref: "Group"
+        ref: "Posts"
     },
 }, { timestamps: true })
 

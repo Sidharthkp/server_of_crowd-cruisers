@@ -8,7 +8,7 @@ const EventSchema = new mongoose.Schema({
     },
     eventId: {
         type: ObjectId,
-        ref: "Group"
+        ref: "Posts"
     }
 }, { timestamps: true })
 

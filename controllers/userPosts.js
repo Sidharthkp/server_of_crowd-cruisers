@@ -150,11 +150,22 @@ const wishList = async (req, res) => {
     }
 }
 
+const saveItems = async (req, res) => {
+    try {
+        WhishList.find({ userName: req.body.username }).populate("eventId")
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not get saveditems", err }));
+    } catch (err) {
+        res.status(400).json({ error: "could not save items", err });
+    }
+}
+
 module.exports = {
     image,
     postImages,
     single,
     getImage,
     regsiterUser,
-    wishList
+    wishList,
+    saveItems
 }
