@@ -114,6 +114,20 @@ const getImage = (req, res) => {
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
+const regsiterUser = async (req, res) => {
+    try {
+        const groups = await Posts.findOneAndUpdate({ _id: req.body.id }, {
+            $push: {
+                members: req.body.username
+            }
+        })
+        await groups.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could notjoin group", err }));
+
+    } catch (err) {
+        res.status(400).json({ error: "could not join group", err });
+    }
+}
+
 module.exports = {
     image,
     postImages,
