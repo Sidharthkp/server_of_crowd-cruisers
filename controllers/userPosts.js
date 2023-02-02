@@ -8,6 +8,8 @@ const url = require("url");
 const path = require("path");
 
 const multer = require("multer");
+const Ride = require("../models/Rides");
+const Event = require("../models/Events");
 
 
 //Filtering the file
@@ -93,11 +95,11 @@ const image = async (req, res) => {
 }
 
 const postImages = async (req, res) => {
-    console.log(req.file);
     const post = new Posts({
         description: req.body.description,
         image: req.file.path,
-        group: req.body.details
+        group: req.body.details,
+        eventType: req.body.event
     });
 
     try {
@@ -115,16 +117,23 @@ const getImage = (req, res) => {
 }
 
 const regsiterUser = async (req, res) => {
+    const post = await Posts.findOne({ _id: req.body.id })
     try {
-        const groups = await Posts.findOneAndUpdate({ _id: req.body.id }, {
-            $push: {
-                members: req.body.username
-            }
-        })
-        await groups.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could notjoin group", err }));
-
+        if (post.eventType == "ride") {
+            const rideJoin = new Ride({
+                userName: req.body.username,
+                rideId: req.body.id
+            })
+            await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+        } else {
+            const eventJoin = new Event({
+                userName: req.body.username,
+                eventId: req.body.id
+            })
+            await eventJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+        }
     } catch (err) {
-        res.status(400).json({ error: "could not join group", err });
+        res.status(400).json({ error: "could not join event/ride", err });
     }
 }
 
@@ -132,5 +141,6 @@ module.exports = {
     image,
     postImages,
     single,
-    getImage
+    getImage,
+    regsiterUser
 }

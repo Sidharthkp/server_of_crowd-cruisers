@@ -6,7 +6,7 @@ const EventSchema = new mongoose.Schema({
     userName: {
         type: String
     },
-    groupId: {
+    eventId: {
         type: ObjectId,
         ref: "Group"
     }

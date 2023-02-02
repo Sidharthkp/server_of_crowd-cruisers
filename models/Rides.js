@@ -6,10 +6,10 @@ const RideSchema = new mongoose.Schema({
     userName: {
         type: String
     },
-    groupId: {
+    rideId: {
         type: ObjectId,
         ref: "Group"
-    }
+    },
 }, { timestamps: true })
 
 const Ride = mongoose.model("Rides", RideSchema);
