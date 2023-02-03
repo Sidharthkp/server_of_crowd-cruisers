@@ -173,12 +173,15 @@ const regsiterUser = async (req, res) => {
 }
 
 const wishList = async (req, res) => {
+    const wish = await WhishList.findOne({ userName: req.body.username, eventId: req.body.id })
     try {
-        const wishList = new WhishList({
-            userName: req.body.userName,
-            eventId: req.body.id
-        })
-        await wishList.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
+        if (!wish) {
+            const wishList = new WhishList({
+                userName: req.body.username,
+                eventId: req.body.id
+            })
+            await wishList.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
+        }
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
     }
@@ -196,12 +199,12 @@ const saveItems = async (req, res) => {
 
 const removeSaved = async (req, res) => {
     try {
-        WhishList.findOneAndDelete({_id: req.body.id, userName: req.body.username})
-        .then((data) => res.json(data))
+        WhishList.findOneAndDelete({ _id: req.body.id, userName: req.body.username })
+            .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not delete saveditems", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
-    } 
+    }
 }
 
 module.exports = {
