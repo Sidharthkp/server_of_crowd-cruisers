@@ -10,6 +10,17 @@ const addNew = async (req, res) => {
     }
 }
 
+const showProfile = async (req, res) => {
+    try {
+        User.find({ email: req.body.email })
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not get data", err }));
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
 module.exports = {
-    addNew
+    addNew,
+    showProfile
 }
