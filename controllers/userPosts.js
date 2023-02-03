@@ -120,8 +120,8 @@ const getImage = (req, res) => {
 const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
-    const rideCheck = await Ride.find({userName: req.body.username, rideId: req.body.id})
-    const eventCheck = await Event.find({userName: req.body.username, eventId: req.body.id})
+    const rideCheck = await Ride.find({ userName: req.body.username, rideId: req.body.id })
+    const eventCheck = await Event.find({ userName: req.body.username, eventId: req.body.id })
     console.log(rideCheck)
     console.log(eventCheck)
     try {
@@ -194,6 +194,16 @@ const saveItems = async (req, res) => {
     }
 }
 
+const removeSaved = async (req, res) => {
+    try {
+        WhishList.findOneAndDelete({_id: req.body.id, userName: req.body.username})
+        .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not delete saveditems", err }));
+    } catch (err) {
+        res.status(400).json({ error: "could not save items", err });
+    } 
+}
+
 module.exports = {
     image,
     postImages,
@@ -201,5 +211,6 @@ module.exports = {
     getImage,
     regsiterUser,
     wishList,
-    saveItems
+    saveItems,
+    removeSaved
 }
