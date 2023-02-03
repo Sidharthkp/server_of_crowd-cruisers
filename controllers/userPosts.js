@@ -137,6 +137,18 @@ const getImage = (req, res) => {
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
+const events = (req, res) => {
+    Posts.find({eventType: "event"})
+        .then((posts) => res.json(posts))
+        .catch((err) => res.json({ error: "could not get posts", err }));
+}
+
+const rides = (req, res) => {
+    Posts.find({eventType: "ride"})
+        .then((posts) => res.json(posts))
+        .catch((err) => res.json({ error: "could not get posts", err }));
+}
+
 const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
@@ -235,5 +247,7 @@ module.exports = {
     regsiterUser,
     wishList,
     saveItems,
-    removeSaved
+    removeSaved,
+    events,
+    rides
 }

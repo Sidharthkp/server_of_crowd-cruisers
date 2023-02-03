@@ -27,13 +27,24 @@ const showCreatedCommunity = async (req, res) => {
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get details", err }));
 
-    } catch {
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
 
+const showMembers = async (req, res) => {
+    try {
+        Group.find({ _id: req.body.data })
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not get group details", err }));
+    } catch (err) {
+        res.status(500).json(err)
     }
 }
 
 module.exports = {
     addNew,
     showProfile,
-    showCreatedCommunity
+    showCreatedCommunity,
+    showMembers
 }
