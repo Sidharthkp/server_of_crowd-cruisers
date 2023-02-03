@@ -5,6 +5,7 @@ const app = express()
 const pinRoute = require("./routes/mapPins")
 const postRoute = require("./routes/userPosts")
 const groupRoute = require("./routes/createGroup")
+const userRoute = require("./routes/userProfile")
 const cors = require('cors');
 const http = require('http').Server(app);
 
@@ -79,6 +80,8 @@ app.use("/api/pins", pinRoute)
 app.use("/api/userPosts", postRoute)
 
 app.use("/api/createGroup", groupRoute)
+
+app.use("/api/profile", userRoute)
 
 http.listen(3000, () => {
     console.log("Server has started at 3000");
