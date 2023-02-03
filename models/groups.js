@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const GroupSchema = new mongoose.Schema({
     admin: {
         type: String,
@@ -14,7 +16,14 @@ const GroupSchema = new mongoose.Schema({
     members: {
         type: [String],
     },
-
+    events: {
+        type: [ObjectId],
+        ref: "Events"
+    },
+    rides: {
+        type: [ObjectId],
+        ref: "Rides"
+    },
     image: {
         type: [String]
     }

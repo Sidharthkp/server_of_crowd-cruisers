@@ -11,6 +11,7 @@ const multer = require("multer");
 const Ride = require("../models/Rides");
 const Event = require("../models/Events");
 const WhishList = require("../models/WishList");
+const Group = require("../models/Groups");
 
 
 //Filtering the file
@@ -104,7 +105,26 @@ const postImages = async (req, res) => {
     });
 
     try {
-        const pro = await post.save();
+        post.save().then(() => {
+            console.log("post id: " + post._id);
+            if (req.body.event === 'ride') {
+                Group.findOneAndUpdate({ _id: req.body.details }, {
+                    $push: {
+                        rides: post._id
+                    }
+                }).then(() => {
+                    console.log("worked");
+                })
+            } else {
+                Group.findOneAndUpdate({ _id: req.body.details }, {
+                    $push: {
+                        events: post._id
+                    }
+                }).then(() => {
+                    console.log("worked");
+                })
+            }
+        })
         res.json(pro);
     } catch (err) {
         res.status(400).json({ error: "could not post product", err });

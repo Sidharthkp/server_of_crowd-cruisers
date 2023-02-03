@@ -1,3 +1,4 @@
+const Group = require("../models/Groups");
 const User = require("../models/User")
 
 const addNew = async (req, res) => {
@@ -20,7 +21,19 @@ const showProfile = async (req, res) => {
     }
 }
 
+const showCreatedCommunity = async (req, res) => {
+    try {
+        Group.find({ admin: req.body.email })
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not get details", err }));
+
+    } catch {
+
+    }
+}
+
 module.exports = {
     addNew,
-    showProfile
+    showProfile,
+    showCreatedCommunity
 }
