@@ -112,7 +112,8 @@ const newGroup = async (req, res) => {
     console.log(req.body);
     const newgroup = new Group({
         admin: req.body.adminName,
-        groupName: req.body.roomName
+        groupName: req.body.roomName,
+        members: [req.body.adminName]
     })
     try {
         const newGroup = await newgroup.save();
