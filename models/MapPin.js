@@ -21,7 +21,12 @@ const MapSchema = new mongoose.Schema({
     longitude: {
         type: Number,
         required: true
-    }
+    },
+    expireAt: {
+        type: Date,
+        default: Date.now,
+        index: { expires: '60m' },
+    },
 }, { timestamps: true })
 
 
