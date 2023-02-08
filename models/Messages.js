@@ -17,7 +17,7 @@ const MessageSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "Group"
     }
-})
+}, { timestamps: true })
 
 const Messages = mongoose.model("Message", MessageSchema);
 

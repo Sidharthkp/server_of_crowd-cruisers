@@ -157,8 +157,8 @@ const openGroup = async (req, res) => {
 const messages = async (req, res) => {
     try {
         await Messages.find({ group: req.body.details })
-        .then((groupMsg) => res.json(groupMsg))
-        .catch((err) => res.json({ error: "could not get group messages", err }));
+            .then((groupMsg) => res.json(groupMsg))
+            .catch((err) => res.json({ error: "could not get group messages", err }));
     } catch (err) {
         res.status(400).json({ error: "could not retrieve messages", err });
     }
