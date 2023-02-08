@@ -25,7 +25,7 @@ const MapSchema = new mongoose.Schema({
     expireAt: {
         type: Date,
         default: Date.now,
-        index: { expires: '60m' },
+        index: { expires: '2h' },
     },
 }, { timestamps: true })
 
