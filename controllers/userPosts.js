@@ -13,7 +13,6 @@ const Event = require("../models/Events");
 const WhishList = require("../models/WishList");
 const Group = require("../models/Groups");
 
-
 //Filtering the file
 const fileFilter = (req, file, cb) => {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
@@ -133,7 +132,7 @@ const postImages = async (req, res) => {
 }
 
 const getImage = (req, res) => {
-    Posts.find()
+    Posts.find({ expirationDate: { $lte: new Date() } })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
