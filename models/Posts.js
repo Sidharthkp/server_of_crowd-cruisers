@@ -15,6 +15,9 @@ const PostsSchema = new mongoose.Schema({
     },
     eventType: {
         type: String,
+    },
+    expirationDate: {
+        type:  Date
     }
 }, { timestamps: true })
 
