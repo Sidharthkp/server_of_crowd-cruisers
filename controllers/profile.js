@@ -34,7 +34,7 @@ const showCreatedCommunity = async (req, res) => {
 
 const showMembers = async (req, res) => {
     try {
-        Group.find({ _id: req.body.data })
+        Group.findOne({ _id: req.body.data })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get group details", err }));
     } catch (err) {
