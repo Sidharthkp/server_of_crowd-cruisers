@@ -23,7 +23,7 @@ const showProfile = async (req, res) => {
 
 const showCreatedCommunity = async (req, res) => {
     try {
-        Group.find({ admin: req.body.email })
+        Group.find({ admin: req.body.email }).populate({ path: "events" }).populate({ path: "rides" })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get details", err }));
 

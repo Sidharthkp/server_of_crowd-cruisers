@@ -18,11 +18,11 @@ const GroupSchema = new mongoose.Schema({
     },
     events: {
         type: [ObjectId],
-        ref: "Events"
+        ref: "Posts"
     },
     rides: {
         type: [ObjectId],
-        ref: "Rides"
+        ref: "Posts"
     },
     image: {
         type: [String]
