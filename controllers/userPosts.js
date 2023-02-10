@@ -159,14 +159,14 @@ const regsiterUser = async (req, res) => {
     try {
         if (!wish) {
             if (post.eventType == "ride" && rideCheck.length == 0) {
-                post.regMembers.push(user._id)
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
                 const rideJoin = new Ride({
                     regMember: user._id,
                     rideId: req.body.id
                 })
                 await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
             } else if (post.eventType == "event" && eventCheck.length == 0) {
-                post.regMembers.push(user._id)
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
                 const eventJoin = new Event({
                     regMember: user._id,
                     eventId: req.body.id
@@ -178,7 +178,7 @@ const regsiterUser = async (req, res) => {
             }
         } else {
             if (post.eventType == "ride") {
-                post.regMembers.push(user._id)
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
                 const rideJoin = new Ride({
                     userName: user._id,
                     rideId: req.body.id
@@ -190,7 +190,7 @@ const regsiterUser = async (req, res) => {
                     })
                     .catch((err) => res.json({ error: "could not join ride", err }));
             } else {
-                post.regMembers.push(user._id)
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
                 const eventJoin = new Event({
                     userName: user._id,
                     eventId: req.body.id
