@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const RideSchema = new mongoose.Schema({
-    userName: {
-        type: String
+    regMember: {
+        type: ObjectId,
+        ref: 'Profile'
     },
     rideId: {
         type: ObjectId,

@@ -17,7 +17,11 @@ const PostsSchema = new mongoose.Schema({
         type: String,
     },
     expirationDate: {
-        type:  Date
+        type: Date
+    },
+    regMembers: {
+        type: [ObjectId],
+        ref: 'Profile'
     }
 }, { timestamps: true })
 
