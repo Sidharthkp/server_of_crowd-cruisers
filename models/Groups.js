@@ -27,7 +27,7 @@ const GroupSchema = new mongoose.Schema({
     image: {
         type: [String]
     }
-})
+}, { timestamps: true })
 
 const Group = mongoose.model("Group", GroupSchema);
 

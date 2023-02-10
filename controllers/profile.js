@@ -24,7 +24,7 @@ const showProfile = async (req, res) => {
 
 const showCreatedCommunity = async (req, res) => {
     try {
-        Group.find({ admin: req.body.email }).populate({ path: "events" }).populate({ path: "rides" })
+        Group.find({ admin: req.body.email }).populate({ path: "events" }).populate({ path: "rides" }).sort({createdAt: -1})
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get details", err }));
 
@@ -35,7 +35,7 @@ const showCreatedCommunity = async (req, res) => {
 
 const showMembers = async (req, res) => {
     try {
-        Group.findOne({ _id: req.body.data })
+        Group.findOne({ _id: req.body.data }).sort({createdAt: -1})
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get group details", err }));
     } catch (err) {
@@ -45,7 +45,7 @@ const showMembers = async (req, res) => {
 
 const membersParticipated = async (req, res) => {
     try {
-        Post.findOne({ _id: req.body.data }).populate({ path: "regMembers" })
+        Post.findOne({ _id: req.body.data }).populate({ path: "regMembers" }).sort({createdAt: -1})
             .then((data) => res.json(data.regMembers))
             .catch((err) => res.json({ error: "could not get group details", err }));
     } catch (err) {
@@ -55,7 +55,7 @@ const membersParticipated = async (req, res) => {
 
 const showJoinedEventsRides = async (req, res) => {
     try {
-        Post.find().populate({ path: "regMembers" })
+        Post.find().populate({ path: "regMembers" }).sort({createdAt: -1})
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get group details", err }));
     } catch (err) {

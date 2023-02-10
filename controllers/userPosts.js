@@ -131,19 +131,19 @@ const postImages = async (req, res) => {
 }
 
 const getImage = (req, res) => {
-    Posts.find({ expirationDate: { $gte: new Date() } })
+    Posts.find({ expirationDate: { $gte: new Date() } }).sort({createdAt: -1})
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const events = (req, res) => {
-    Posts.find({ eventType: "event", expirationDate: { $gte: new Date() } })
+    Posts.find({ eventType: "event", expirationDate: { $gte: new Date() } }).sort({createdAt: -1})
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const rides = (req, res) => {
-    Posts.find({ eventType: "ride", expirationDate: { $gte: new Date() }  })
+    Posts.find({ eventType: "ride", expirationDate: { $gte: new Date() }  }).sort({createdAt: -1})
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
@@ -206,7 +206,7 @@ const wishList = async (req, res) => {
 
 const saveItems = async (req, res) => {
     try {
-        WhishList.find({ userName: req.body.username }).populate("eventId")
+        WhishList.find({ userName: req.body.username }).populate("eventId").sort({createdAt: -1})
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
