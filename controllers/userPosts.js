@@ -131,19 +131,19 @@ const postImages = async (req, res) => {
 }
 
 const getImage = (req, res) => {
-    Posts.find({ expirationDate: { $lte: new Date() } })
+    Posts.find({ expirationDate: { $gte: new Date() } })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const events = (req, res) => {
-    Posts.find({ eventType: "event" })
+    Posts.find({ eventType: "event" }, { expirationDate: { $gte: new Date() } })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const rides = (req, res) => {
-    Posts.find({ eventType: "ride" })
+    Posts.find({ eventType: "ride" }, { expirationDate: { $gte: new Date() } })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
