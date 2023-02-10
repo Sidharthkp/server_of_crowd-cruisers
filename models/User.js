@@ -15,7 +15,7 @@ const ProfileSchema = new mongoose.Schema({
         required: true
     },
     profileImage: {
-        type: [String]
+        type: String
     },
     vehicledetails: {
         type: ObjectId

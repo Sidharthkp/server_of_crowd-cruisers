@@ -166,27 +166,13 @@ const editDp = async (req, res) => {
                 email: req.body.email
             },
             {
-                $push: {
+                $set: {
                     profileImage: req.file.path
                 }
             }
         )
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not edit dp", err }));
-    } catch (err) {
-        res.status(500).json(err)
-    }
-}
-
-const showDp = async (req, res) => {
-    try {
-        Profile.findOne(
-            {
-                email: req.body.email
-            }
-        )
-            .then((data) => res.json(data))
-            .catch((err) => res.json({ error: "could not get get dp", err }));
     } catch (err) {
         res.status(500).json(err)
     }
@@ -200,7 +186,6 @@ module.exports = {
     membersParticipated,
     showJoinedEventsRides,
     editDp,
-    showDp,
     image,
     single
 }

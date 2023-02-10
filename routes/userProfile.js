@@ -1,15 +1,13 @@
 //js
 const express = require('express');
 
-const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides, editDp, showDp, single, image } = require('../controllers/profile');
+const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides, editDp, single, image } = require('../controllers/profile');
 
 const router = express.Router();
 
 router.use("/image", image)
 
 router.get("/showJoinedEventsRides", showJoinedEventsRides)
-
-router.get("/showDp", showDp)
 
 router.post("/addNew", addNew)
 
