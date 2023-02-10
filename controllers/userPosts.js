@@ -152,16 +152,15 @@ const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
     const user = await Profile.findOne({ email: req.body.username })
-    const check = post.regMembers.some((x) => toString(x) == toString(user._id))
-    console.log(check);
+    const check = post.regMembers.some((x) => { x == user._id })
     try {
         if (!wish) {
             if (post.eventType == "ride" && !check) {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
             } else if (post.eventType == "event" && !check) {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
             } else {
                 console.log("REched bad");
                 res.json({ error: "could not join ride", err });
@@ -169,7 +168,7 @@ const regsiterUser = async (req, res) => {
         } else {
             if (post.eventType == "ride") {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                
+
                     .then(async (added) => {
                         await WhishList.findOneAndDelete({ eventId: req.body.id })
                         res.json(added)
@@ -177,7 +176,7 @@ const regsiterUser = async (req, res) => {
                     .catch((err) => res.json({ error: "could not join ride", err }));
             } else {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                
+
                     .then(async (added) => {
                         await WhishList.findOneAndDelete({ eventId: req.body.id })
                         res.json(added)

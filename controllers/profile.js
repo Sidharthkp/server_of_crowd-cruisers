@@ -1,4 +1,5 @@
 const Group = require("../models/Groups");
+const Post = require("../models/Posts");
 const User = require("../models/User")
 
 const addNew = async (req, res) => {
@@ -42,9 +43,11 @@ const showMembers = async (req, res) => {
     }
 }
 
-const membersParticipated = async (req,res) => {
+const membersParticipated = async (req, res) => {
     try {
-        const group = Group.find({ admin: req.body.email });
+        Post.findOne({ _id: req.body.data }).populate({ path: "regMembers" })
+            .then((data) => res.json(data.regMembers))
+            .catch((err) => res.json({ error: "could not get group details", err }));
     } catch (err) {
         res.status(500).json(err)
     }
@@ -54,5 +57,6 @@ module.exports = {
     addNew,
     showProfile,
     showCreatedCommunity,
-    showMembers
+    showMembers,
+    membersParticipated
 }
