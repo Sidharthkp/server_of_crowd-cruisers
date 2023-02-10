@@ -152,7 +152,8 @@ const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
     const user = await Profile.findOne({ email: req.body.username })
-    const check = post.regMembers.some(x => x === user._id)
+    const check = post.regMembers.some((x) => toString(x) == toString(user._id))
+    console.log(check);
     try {
         if (!wish) {
             if (post.eventType == "ride" && !check) {
