@@ -8,8 +8,6 @@ const url = require("url");
 const path = require("path");
 
 const multer = require("multer");
-const Ride = require("../models/Rides");
-const Event = require("../models/Events");
 const WhishList = require("../models/WishList");
 const Group = require("../models/Groups");
 const Profile = require("../models/User");
@@ -154,24 +152,15 @@ const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
     const user = await Profile.findOne({ email: req.body.username })
-    const rideCheck = await Ride.find({ regMember: user._id, rideId: req.body.id })
-    const eventCheck = await Event.find({ regMember: user._id, eventId: req.body.id })
+    const check = post.regMembers.some(x => x === user._id)
     try {
         if (!wish) {
-            if (post.eventType == "ride" && rideCheck.length == 0) {
+            if (post.eventType == "ride" && !check) {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                const rideJoin = new Ride({
-                    regMember: user._id,
-                    rideId: req.body.id
-                })
-                await rideJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
-            } else if (post.eventType == "event" && eventCheck.length == 0) {
+                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+            } else if (post.eventType == "event" && !check) {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                const eventJoin = new Event({
-                    regMember: user._id,
-                    eventId: req.body.id
-                })
-                await eventJoin.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
             } else {
                 console.log("REched bad");
                 res.json({ error: "could not join ride", err });
@@ -179,11 +168,7 @@ const regsiterUser = async (req, res) => {
         } else {
             if (post.eventType == "ride") {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                const rideJoin = new Ride({
-                    userName: user._id,
-                    rideId: req.body.id
-                })
-                rideJoin.save()
+                
                     .then(async (added) => {
                         await WhishList.findOneAndDelete({ eventId: req.body.id })
                         res.json(added)
@@ -191,11 +176,7 @@ const regsiterUser = async (req, res) => {
                     .catch((err) => res.json({ error: "could not join ride", err }));
             } else {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                const eventJoin = new Event({
-                    userName: user._id,
-                    eventId: req.body.id
-                })
-                eventJoin.save()
+                
                     .then(async (added) => {
                         await WhishList.findOneAndDelete({ eventId: req.body.id })
                         res.json(added)

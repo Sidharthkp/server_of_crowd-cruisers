@@ -42,6 +42,14 @@ const showMembers = async (req, res) => {
     }
 }
 
+const membersParticipated = async (req,res) => {
+    try {
+        const group = Group.find({ admin: req.body.email });
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
 module.exports = {
     addNew,
     showProfile,
