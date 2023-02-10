@@ -105,7 +105,6 @@ const postImages = async (req, res) => {
 
     try {
         post.save().then(() => {
-            console.log("post id: " + post._id);
             if (req.body.event === 'ride') {
                 Group.findOneAndUpdate({ _id: req.body.details }, {
                     $push: {
