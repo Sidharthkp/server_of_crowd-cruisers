@@ -1,9 +1,11 @@
 //js
 const express = require('express');
 
-const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated } = require('../controllers/profile');
+const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides } = require('../controllers/profile');
 
 const router = express.Router();
+
+router.get("/showJoinedEventsRides", showJoinedEventsRides)
 
 router.post("/addNew", addNew)
 

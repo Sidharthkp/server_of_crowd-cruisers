@@ -53,10 +53,21 @@ const membersParticipated = async (req, res) => {
     }
 }
 
+const showJoinedEventsRides = async (req, res) => {
+    try {
+        Post.find().populate({ path: "regMembers" })
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not get group details", err }));
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
 module.exports = {
     addNew,
     showProfile,
     showCreatedCommunity,
     showMembers,
-    membersParticipated
+    membersParticipated,
+    showJoinedEventsRides
 }
