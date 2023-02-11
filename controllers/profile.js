@@ -1,5 +1,3 @@
-const Posts = require("../models/Posts");
-
 const fs = require("fs");
 
 const url = require("url");
