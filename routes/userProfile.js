@@ -1,7 +1,7 @@
 //js
 const express = require('express');
 
-const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides, editDp, single, image } = require('../controllers/profile');
+const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides, editDp, single, image, profileEdit } = require('../controllers/profile');
 
 const router = express.Router();
 
@@ -20,5 +20,7 @@ router.post("/showMembers", showMembers)
 router.post("/showJoinedMembers", membersParticipated)
 
 router.post("/editImage", single, editDp)
+
+router.post("/profileEdit", profileEdit)
 
 module.exports = router;

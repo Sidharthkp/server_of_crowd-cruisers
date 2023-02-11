@@ -176,6 +176,25 @@ const editDp = async (req, res) => {
     }
 }
 
+const profileEdit = async (req, res) => {
+    try {
+        Profile.findOneAndUpdate(
+            {
+                email: req.body.details
+            },
+            {
+                $set: {
+                    userName: req.body.userName
+                }
+            }
+        )
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not edit dp", err }));
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
 module.exports = {
     addNew,
     showProfile,
@@ -185,5 +204,6 @@ module.exports = {
     showJoinedEventsRides,
     editDp,
     image,
-    single
+    single,
+    profileEdit
 }
