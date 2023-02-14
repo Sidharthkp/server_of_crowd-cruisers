@@ -130,7 +130,7 @@ const postImages = async (req, res) => {
 }
 
 const getImage = (req, res) => {
-    Posts.find({ expirationDate: { $gte: new Date() } }).sort({createdAt: -1})
+    Posts.find({ expirationDate: { $lte: new Date() } }).sort({createdAt: -1})
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
