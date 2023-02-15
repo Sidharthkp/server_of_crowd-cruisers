@@ -37,7 +37,7 @@ socketIO.on('connection', (socket) => {
         // socketIO.emit('messageResponse', data);
         //Adds the new user to the list of users
         users.push(data.name);
-        // console.log(users);
+       
         //Sends the list of users to the client
         socketIO.emit('newUserResponse', users);
 
