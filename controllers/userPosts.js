@@ -215,7 +215,7 @@ const saveItems = async (req, res) => {
 
 const removeSaved = async (req, res) => {
     try {
-        WhishList.findOneAndDelete({ _id: req.body.id, userName: req.body.username })
+        WhishList.findOneAndDelete({ eventId: req.body.id, userName: req.body.username })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not delete saveditems", err }));
     } catch (err) {
