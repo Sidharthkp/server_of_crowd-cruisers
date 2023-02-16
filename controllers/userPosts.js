@@ -147,24 +147,10 @@ const rides = (req, res) => {
 }
 
 const regsiterUser = async (req, res) => {
-    const wish = await WhishList.findOne({ userName: req.body.username, eventId: req.body.id })
-    const user = await Profile.findOne({ email: req.body.username })
+    const user = await Profile.findOne({ email: req.body.username }).populate("wishList")
     try {
-
-        if (!wish) {
-            await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
-        } else {
-
-            await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-
-                .then(async (added) => {
-                    await WhishList.findOneAndDelete({ userName: req.body.username, eventId: req.body.id })
-                    res.json(added)
-                })
-                .catch((err) => res.json({ error: "could not join ride", err }));
-        }
-
+        await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
+            .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
     } catch (err) {
         res.status(400).json({ error: "could not join event/ride", err });
     }
@@ -182,8 +168,12 @@ const remove = async (req, res) => {
 
 const removeAndAddInWishlist = async (req, res) => {
     const user = await Profile.findOne({ email: req.body.username })
-    const wish = await WhishList.findOne({ userName: req.body.username, eventId: req.body.id })
-
+    let wish = false;
+    for(let i=0; i<user.wishList.length; i++){
+        if(user.wishList[i].toString() == req.body.id) {
+            wish = true
+        }
+    }
     try {
         if (wish) {
             await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
@@ -191,11 +181,8 @@ const removeAndAddInWishlist = async (req, res) => {
         } else {
             await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
                 .then(async (added) => {
-                    const wishList = new WhishList({
-                        userName: req.body.username,
-                        eventId: req.body.id
-                    })
-                    await wishList.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
+                    await Profile.findOneAndUpdate({ email: req.body.username }, { $push: { wishList: req.body.id } })
+                        .then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
                 }).catch((err) => res.json({ error: "could not join event", err }));
         }
     } catch (err) {
@@ -205,17 +192,17 @@ const removeAndAddInWishlist = async (req, res) => {
 
 const wishList = async (req, res) => {
     try {
-        await Profile.findByIdAndUpdate({ userName: req.body.username }, { $push: { wishList: req.body.id } })
+        await Profile.findOneAndUpdate({ email: req.body.username }, { $push: { wishList: req.body.id } })
             .then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
     }
 }
 
-const saveItems = async (req, res) => {
+const savedItems = async (req, res) => {
     try {
-        Profile.find({ userName: req.body.username }).populate("wishList").sort({ createdAt: -1 })
-            .then((data) => res.json(data))
+        Profile.find({ email: req.body.username }).populate("wishList").sort({ createdAt: -1 })
+            .then((data) => res.json(data[0]))
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
@@ -224,7 +211,7 @@ const saveItems = async (req, res) => {
 
 const removeSaved = async (req, res) => {
     try {
-        WhishList.findOneAndDelete({ eventId: req.body.id, userName: req.body.username })
+        Profile.findOneAndUpdate({ email: req.body.username }, { $pull: { wishList: req.body.id } })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not delete saveditems", err }));
     } catch (err) {
@@ -239,7 +226,7 @@ module.exports = {
     getImage,
     regsiterUser,
     wishList,
-    saveItems,
+    savedItems,
     removeSaved,
     events,
     rides,
