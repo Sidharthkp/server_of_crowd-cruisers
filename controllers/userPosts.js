@@ -202,7 +202,7 @@ const wishList = async (req, res) => {
 const savedItems = async (req, res) => {
     try {
         Profile.find({ email: req.body.username }).populate("wishList").sort({ createdAt: -1 })
-            .then((data) => res.json(data[0]))
+            .then((data) => res.json(data[0].wishList))
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
