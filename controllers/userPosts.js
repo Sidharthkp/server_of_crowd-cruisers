@@ -130,19 +130,19 @@ const postImages = async (req, res) => {
 }
 
 const getImage = (req, res) => {
-    Posts.find({ expirationDate: { $gte: new Date() } }).sort({createdAt: -1}).populate("regMembers")
+    Posts.find({ expirationDate: { $gte: new Date() } }).sort({ createdAt: -1 }).populate("regMembers")
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const events = (req, res) => {
-    Posts.find({ eventType: "event", expirationDate: { $gte: new Date() } }).sort({createdAt: -1})
+    Posts.find({ eventType: "event", expirationDate: { $gte: new Date() } }).sort({ createdAt: -1 })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
 
 const rides = (req, res) => {
-    Posts.find({ eventType: "ride", expirationDate: { $gte: new Date() }  }).sort({createdAt: -1})
+    Posts.find({ eventType: "ride", expirationDate: { $gte: new Date() } }).sort({ createdAt: -1 })
         .then((posts) => res.json(posts))
         .catch((err) => res.json({ error: "could not get posts", err }));
 }
@@ -153,31 +153,42 @@ const regsiterUser = async (req, res) => {
     const user = await Profile.findOne({ email: req.body.username })
     const check = post.regMembers.some((x) => { x == user._id })
     try {
-        if (!wish) {
-            if (post.eventType == "ride" && !check) {
+        if (!check) {
+            if (!wish) {
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
-            } else if (post.eventType == "event" && !check) {
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join ride", err }));
+                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
             } else {
-                console.log("REched bad");
-                res.json({ error: "could not join ride", err });
-            }
-        } else {
-            if (post.eventType == "ride") {
+
                 await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
 
                     .then(async (added) => {
-                        await WhishList.findOneAndDelete({ eventId: req.body.id })
+                        await WhishList.findOneAndDelete({ userName: req.body.username, eventId: req.body.id })
                         res.json(added)
                     })
                     .catch((err) => res.json({ error: "could not join ride", err }));
+            }
+        }
+    } catch (err) {
+        res.status(400).json({ error: "could not join event/ride", err });
+    }
+}
+
+const remove = async (req, res) => {
+    const post = await Posts.findOne({ _id: req.body.id })
+    const wish = await WhishList.findOne({ userName: req.body.username })
+    const user = await Profile.findOne({ email: req.body.username })
+    const check = post.regMembers.some((x) => { x == user._id })
+    try {
+        if (check) {
+            if (wish) {
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $pullAll: { regMembers: user._id } })
+                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
             } else {
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
+
+                await Posts.findOneAndUpdate({ _id: req.body.id }, { $pullAll: { regMembers: user._id } })
 
                     .then(async (added) => {
-                        await WhishList.findOneAndDelete({ eventId: req.body.id })
+
                         res.json(added)
                     })
                     .catch((err) => res.json({ error: "could not join ride", err }));
@@ -205,7 +216,7 @@ const wishList = async (req, res) => {
 
 const saveItems = async (req, res) => {
     try {
-        WhishList.find({ userName: req.body.username }).populate("eventId").sort({createdAt: -1})
+        WhishList.find({ userName: req.body.username }).populate("eventId").sort({ createdAt: -1 })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
