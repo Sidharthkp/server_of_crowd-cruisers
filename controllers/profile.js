@@ -11,7 +11,7 @@ const multer = require("multer");
 const Group = require("../models/Groups");
 const Post = require("../models/Posts");
 const User = require("../models/User");
-const Profile = require("../models/User");
+const { findOne } = require("../models/Posts");
 
 
 //Filtering the file
@@ -97,10 +97,16 @@ const image = async (req, res) => {
 }
 
 const addNew = async (req, res) => {
-    const newUser = new User(req.body);
+    const user = await User.findOne({ uid: req.body.uid })
     try {
-        const savedUser = await newUser.save();
-        res.status(200).json(savedUser);
+        if (!user) {
+            const newUser = new User(req.body);
+            const savedUser = await newUser.save();
+            res.status(200).json(savedUser);
+        }else{
+            res.status(200).json("user already exists");
+        }
+        
     } catch (err) {
         res.status(500).json(err)
     }
@@ -159,7 +165,7 @@ const showJoinedEventsRides = async (req, res) => {
 
 const editDp = async (req, res) => {
     try {
-        Profile.findOneAndUpdate(
+        User.findOneAndUpdate(
             {
                 email: req.body.email
             },
@@ -178,7 +184,7 @@ const editDp = async (req, res) => {
 
 const profileEdit = async (req, res) => {
     try {
-        Profile.findOneAndUpdate(
+        User.findOneAndUpdate(
             {
                 email: req.body.details
             },

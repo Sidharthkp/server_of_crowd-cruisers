@@ -14,6 +14,10 @@ const ProfileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    wishList: {
+        type: [ObjectId],
+        ref: "Posts"
+    },
     profileImage: {
         type: String
     },

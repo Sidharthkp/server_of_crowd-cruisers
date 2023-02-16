@@ -8,7 +8,6 @@ const url = require("url");
 const path = require("path");
 
 const multer = require("multer");
-const WhishList = require("../models/WishList");
 const Group = require("../models/Groups");
 const Profile = require("../models/User");
 
@@ -205,15 +204,9 @@ const removeAndAddInWishlist = async (req, res) => {
 }
 
 const wishList = async (req, res) => {
-    const wish = await WhishList.findOne({ userName: req.body.username, eventId: req.body.id })
     try {
-        if (!wish) {
-            const wishList = new WhishList({
-                userName: req.body.username,
-                eventId: req.body.id
-            })
-            await wishList.save().then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
-        }
+        await Profile.findByIdAndUpdate({ userName: req.body.username }, { $push: { wishList: req.body.id } })
+            .then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
     }
@@ -221,7 +214,7 @@ const wishList = async (req, res) => {
 
 const saveItems = async (req, res) => {
     try {
-        WhishList.find({ userName: req.body.username }).populate("eventId").sort({ createdAt: -1 })
+        Profile.find({ userName: req.body.username }).populate("wishList").sort({ createdAt: -1 })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
