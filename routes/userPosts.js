@@ -1,7 +1,7 @@
 //js
 const express = require('express');
 
-const { image, postImages, single, getImage, regsiterUser, wishList, saveItems, removeSaved, events, rides } = require('../controllers/userPosts');
+const { image, postImages, single, getImage, regsiterUser, wishList, saveItems, removeSaved, events, rides, remove } = require('../controllers/userPosts');
 
 const router = express.Router();
 
@@ -22,5 +22,9 @@ router.post("/wishList", wishList);
 router.post("/savedItems", saveItems);
 
 router.post("/removeSaved", removeSaved);
+
+router.post("/remove", remove);
+
+router.post("/removeAndAddInWishlist", removeAndAddInWishlist);
 
 module.exports = router;
