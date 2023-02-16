@@ -151,59 +151,51 @@ const regsiterUser = async (req, res) => {
     const post = await Posts.findOne({ _id: req.body.id })
     const wish = await WhishList.findOne({ userName: req.body.username })
     const user = await Profile.findOne({ email: req.body.username })
-    const check = post.regMembers.some((x) => { x == user._id })
     try {
-        if (!check) {
-            if (!wish) {
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
-                    .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
-            } else {
 
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
+        if (!wish) {
+            await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
+                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
+        } else {
 
-                    .then(async (added) => {
-                        await WhishList.findOneAndDelete({ userName: req.body.username, eventId: req.body.id })
-                        res.json(added)
-                    })
-                    .catch((err) => res.json({ error: "could not join ride", err }));
-            }
+            await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
+
+                .then(async (added) => {
+                    await WhishList.findOneAndDelete({ userName: req.body.username, eventId: req.body.id })
+                    res.json(added)
+                })
+                .catch((err) => res.json({ error: "could not join ride", err }));
         }
+
     } catch (err) {
         res.status(400).json({ error: "could not join event/ride", err });
     }
 }
 
 const remove = async (req, res) => {
-    const post = await Posts.findOne({ _id: req.body.id })
     const user = await Profile.findOne({ email: req.body.username })
-    const check = post.regMembers.some((x) => { x == user._id })
     try {
-        if (check) {
-            await Posts.findOneAndUpdate({ _id: req.body.id }, { $pullAll: { regMembers: user._id } })
-                .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
-        }
+        await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
+            .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
     } catch (err) {
         res.status(400).json({ error: "could not join event/ride", err });
     }
 }
 
 const removeAndAddInWishlist = async (req, res) => {
-    const post = await Posts.findOne({ _id: req.body.id })
     const user = await Profile.findOne({ email: req.body.username })
-    const check = post.regMembers.some((x) => { x == user._id })
     const wish = await WhishList.findOne({ userName: req.body.username })
 
     try {
-        if (check) {
-            if(wish){
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $pullAll: { regMembers: user._id } })
+        if (wish) {
+            await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
                 .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
-            }else{
-                await Posts.findOneAndUpdate({ _id: req.body.id }, { $pullAll: { regMembers: user._id } })
+        } else {
+            await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
                 .then(async (added) => {
                     await new WhishList({ userName: req.body.username, eventId: req.body.id })
-                    res.json(added)}).catch((err) => res.json({ error: "could not join event", err }));
-            }
+                    res.json(added)
+                }).catch((err) => res.json({ error: "could not join event", err }));
         }
     } catch (err) {
         res.status(400).json({ error: "could not join event/ride", err });

@@ -1,7 +1,7 @@
 //js
 const express = require('express');
 
-const { image, postImages, single, getImage, regsiterUser, wishList, saveItems, removeSaved, events, rides, remove } = require('../controllers/userPosts');
+const { image, postImages, single, getImage, regsiterUser, wishList, saveItems, removeSaved, events, rides, remove, removeAndAddInWishlist } = require('../controllers/userPosts');
 
 const router = express.Router();
 
