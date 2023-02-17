@@ -109,8 +109,30 @@ const newGroup = async (req, res) => {
 }
 
 const getGroups = (req, res) => {
-    Group.find().sort({createdAt: -1})
+    Group.find().sort({ createdAt: -1 })
         .then((groups) => res.json(groups))
+        .catch((err) => res.json({ error: "could not get groups", err }));
+}
+
+const getGroupsList = (req, res) => {
+    let arrayOfGroups = []
+    Group.find().sort({ createdAt: -1 })
+        .then((groups) => {
+            for (let i = 0; i < groups.length; i++) {
+                let boolean = false;
+                groups[i].members.map((x) => {
+                    if (x === req.body.username) {
+                        boolean = true
+                    }
+                })
+                if (boolean == false) {
+                    arrayOfGroups.push(groups[i])
+                }
+            }
+            console.log(arrayOfGroups);
+            res.json(arrayOfGroups)
+        }
+        )
         .catch((err) => res.json({ error: "could not get groups", err }));
 }
 
@@ -176,5 +198,6 @@ module.exports = {
     messages,
     editGrpDp,
     image,
-    single
+    single,
+    getGroupsList
 }

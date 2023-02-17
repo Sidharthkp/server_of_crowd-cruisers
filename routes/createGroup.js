@@ -1,7 +1,7 @@
 //js
 const express = require('express');
 
-const { newGroup, getGroups, joinGroup, openGroup, messages, editGrpDp, image, single } = require('../controllers/groupController');
+const { newGroup, getGroups, joinGroup, openGroup, messages, editGrpDp, image, single, getGroupsList } = require('../controllers/groupController');
 
 const router = express.Router();
 
@@ -18,5 +18,7 @@ router.post('/message', messages);
 router.post('/editImage', single, editGrpDp);
 
 router.get('/get', getGroups);
+
+router.post('/getGroup', getGroupsList);
 
 module.exports = router;
