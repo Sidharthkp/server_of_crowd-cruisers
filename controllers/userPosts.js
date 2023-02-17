@@ -169,8 +169,8 @@ const remove = async (req, res) => {
 const removeAndAddInWishlist = async (req, res) => {
     const user = await Profile.findOne({ email: req.body.username })
     let wish = false;
-    for(let i=0; i<user.wishList.length; i++){
-        if(user.wishList[i].toString() == req.body.id) {
+    for (let i = 0; i < user.wishList.length; i++) {
+        if (user.wishList[i].toString() == req.body.id) {
             wish = true
         }
     }
@@ -202,7 +202,9 @@ const wishList = async (req, res) => {
 const savedItems = async (req, res) => {
     try {
         Profile.find({ email: req.body.username }).populate("wishList").sort({ createdAt: -1 })
-            .then((data) => res.json(data[0].wishList))
+            .then((data) => {
+                res.json(data[0])
+            })
             .catch((err) => res.json({ error: "could not get saveditems", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
