@@ -129,7 +129,6 @@ const getGroupsList = (req, res) => {
                     arrayOfGroups.push(groups[i])
                 }
             }
-            console.log(arrayOfGroups);
             res.json(arrayOfGroups)
         }
         )
