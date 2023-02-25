@@ -26,6 +26,9 @@ const GroupSchema = new mongoose.Schema({
     },
     image: {
         type: String
+    },
+    messageUpdate: {
+        type: Date
     }
 }, { timestamps: true })
 

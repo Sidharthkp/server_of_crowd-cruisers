@@ -116,7 +116,7 @@ const getGroups = (req, res) => {
 
 const getGroupsList = (req, res) => {
     let arrayOfGroups = []
-    Group.find().sort({ createdAt: -1 })
+    Group.find().sort({ messageUpdate: -1 })
         .then((groups) => {
             for (let i = 0; i < groups.length; i++) {
                 let boolean = false;
@@ -163,7 +163,10 @@ const openGroup = async (req, res) => {
 const messages = async (req, res) => {
     try {
         await Messages.find({ group: req.body.details })
-            .then((groupMsg) => res.json(groupMsg))
+            .then(async (groupMsg) => {
+                await Group.findByIdAndUpdateAndUpdate(req.body.details, { messageUpdate: new Date() })
+                res.json(groupMsg)
+            })
             .catch((err) => res.json({ error: "could not get group messages", err }));
     } catch (err) {
         res.status(400).json({ error: "could not retrieve messages", err });
