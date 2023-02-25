@@ -10,6 +10,7 @@ const cors = require('cors');
 const http = require('http').Server(app);
 
 const Messages = require('./models/Messages');
+const Group = require("./models/Groups");
 
 const corsOptions = {
     origin: '*',
@@ -46,7 +47,8 @@ socketIO.on('connection', (socket) => {
             text: data.text,
             group: data.groupId
         });
-        await saveMsg.save().then(() => {
+        await saveMsg.save().then(async() => {
+            await Group.findByIdAndUpdate(data.groupId, { messageUpdate: new Date() })
             console.log("🐱‍🏍:Message saved in db");
         }).catch((err) => {
             console.log(err);
