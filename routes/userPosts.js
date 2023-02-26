@@ -2,6 +2,7 @@
 const express = require('express');
 
 const { image, postImages, single, getImage, regsiterUser, wishList, savedItems, removeSaved, events, rides, remove, removeAndAddInWishlist } = require('../controllers/userPosts');
+const { emailSanitizer } = require('../middlewares/Sanitization');
 
 const router = express.Router();
 

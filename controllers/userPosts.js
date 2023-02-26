@@ -148,11 +148,12 @@ const rides = (req, res) => {
 
 const regsiterUser = async (req, res) => {
     const user = await Profile.findOne({ email: req.body.username }).populate("wishList")
+    const errors = validationResult(req);
     try {
         await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
             .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
     } catch (err) {
-        res.status(400).json({ error: "could not join event/ride", err });
+        res.status(400).json({ error: "could not join event/ride", err, errors });
     }
 }
 

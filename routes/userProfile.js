@@ -2,6 +2,7 @@
 const express = require('express');
 
 const { addNew, showProfile, showCreatedCommunity, showMembers, membersParticipated, showJoinedEventsRides, editDp, single, image, profileEdit } = require('../controllers/profile');
+const { emailSanitizer } = require('../middlewares/Sanitization');
 
 const router = express.Router();
 
@@ -11,9 +12,9 @@ router.get("/showJoinedEventsRides", showJoinedEventsRides)
 
 router.post("/addNew", addNew)
 
-router.post("/showProfile", showProfile)
+router.post("/showProfile", emailSanitizer, showProfile)
 
-router.post("/showCommunity", showCreatedCommunity)
+router.post("/showCommunity", emailSanitizer, showCreatedCommunity)
 
 router.post("/showMembers", showMembers)
 

@@ -1,3 +1,9 @@
+const Group = require("../models/Groups");
+const Post = require("../models/Posts");
+const User = require("../models/User");
+const { validationResult } = require("express-validator");
+
+
 const fs = require("fs");
 
 const url = require("url");
@@ -5,14 +11,6 @@ const url = require("url");
 const path = require("path");
 
 const multer = require("multer");
-
-
-
-const Group = require("../models/Groups");
-const Post = require("../models/Posts");
-const User = require("../models/User");
-const { findOne } = require("../models/Posts");
-
 
 //Filtering the file
 const fileFilter = (req, file, cb) => {
@@ -113,20 +111,22 @@ const addNew = async (req, res) => {
 }
 
 const showProfile = async (req, res) => {
+    const errors = validationResult(req);
     try {
         User.findOne({ email: req.body.email })
             .then((data) => res.json(data))
-            .catch((err) => res.json({ error: "could not get data", err }));
+            .catch((err) => res.json({ error: "could not get data", err, errors}));
     } catch (err) {
         res.status(500).json(err)
     }
 }
 
 const showCreatedCommunity = async (req, res) => {
+    const errors = validationResult(req);
     try {
         Group.find({ admin: req.body.email }).populate({ path: "events" }).populate({ path: "rides" }).sort({ createdAt: -1 })
             .then((data) => res.json(data))
-            .catch((err) => res.json({ error: "could not get details", err }));
+            .catch((err) => res.json({ error: "could not get details", err, errors }));
 
     } catch (err) {
         res.status(500).json(err)
@@ -183,6 +183,7 @@ const editDp = async (req, res) => {
 }
 
 const profileEdit = async (req, res) => {
+    // const errors = validationResult(req);
     try {
         User.findOneAndUpdate(
             {
