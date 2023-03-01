@@ -16,16 +16,16 @@ router.get("/rides", rides);
 
 router.post("/post", single, postImages);
 
-router.post("/join", regsiterUser);
+router.post("/join", emailSanitizer, regsiterUser);
 
-router.post("/wishList", wishList);
+router.post("/wishList", emailSanitizer, wishList);
 
-router.post("/savedItems", savedItems);
+router.post("/savedItems", emailSanitizer, savedItems);
 
-router.post("/removeSaved", removeSaved);
+router.post("/removeSaved", emailSanitizer, removeSaved);
 
-router.post("/remove", remove);
+router.post("/remove", emailSanitizer, remove);
 
-router.post("/removeAndAddInWishlist", removeAndAddInWishlist);
+router.post("/removeAndAddInWishlist", emailSanitizer, removeAndAddInWishlist);
 
 module.exports = router;

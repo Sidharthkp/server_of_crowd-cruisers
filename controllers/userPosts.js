@@ -10,6 +10,7 @@ const path = require("path");
 const multer = require("multer");
 const Group = require("../models/Groups");
 const Profile = require("../models/User");
+const { validationResult } = require("express-validator");
 
 //Filtering the file
 const fileFilter = (req, file, cb) => {
@@ -147,7 +148,7 @@ const rides = (req, res) => {
 }
 
 const regsiterUser = async (req, res) => {
-    const user = await Profile.findOne({ email: req.body.username }).populate("wishList")
+    const user = await Profile.findOne({ email: req.body.email }).populate("wishList")
     const errors = validationResult(req);
     try {
         await Posts.findOneAndUpdate({ _id: req.body.id }, { $push: { regMembers: user._id } })
@@ -158,7 +159,7 @@ const regsiterUser = async (req, res) => {
 }
 
 const remove = async (req, res) => {
-    const user = await Profile.findOne({ email: req.body.username })
+    const user = await Profile.findOne({ email: req.body.email })
     try {
         await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
             .then((added) => res.json(added)).catch((err) => res.json({ error: "could not join event", err }));
@@ -168,7 +169,7 @@ const remove = async (req, res) => {
 }
 
 const removeAndAddInWishlist = async (req, res) => {
-    const user = await Profile.findOne({ email: req.body.username })
+    const user = await Profile.findOne({ email: req.body.email })
     let wish = false;
     for (let i = 0; i < user.wishList.length; i++) {
         if (user.wishList[i].toString() == req.body.id) {
@@ -182,7 +183,7 @@ const removeAndAddInWishlist = async (req, res) => {
         } else {
             await Posts.findOneAndUpdate({ _id: req.body.id }, { $pull: { regMembers: user._id } })
                 .then(async (added) => {
-                    await Profile.findOneAndUpdate({ email: req.body.username }, { $push: { wishList: req.body.id } })
+                    await Profile.findOneAndUpdate({ email: req.body.email }, { $push: { wishList: req.body.id } })
                         .then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
                 }).catch((err) => res.json({ error: "could not join event", err }));
         }
@@ -193,7 +194,7 @@ const removeAndAddInWishlist = async (req, res) => {
 
 const wishList = async (req, res) => {
     try {
-        await Profile.findOneAndUpdate({ email: req.body.username }, { $push: { wishList: req.body.id } })
+        await Profile.findOneAndUpdate({ email: req.body.email }, { $push: { wishList: req.body.id } })
             .then((added) => res.json(added)).catch((err) => res.json({ error: "could not save item", err }));
     } catch (err) {
         res.status(400).json({ error: "could not save items", err });
@@ -202,19 +203,19 @@ const wishList = async (req, res) => {
 
 const savedItems = async (req, res) => {
     try {
-        Profile.find({ email: req.body.username }).populate({ path: "wishList", populate: { path: "regMembers" }}).sort({ createdAt: -1 })
+        Profile.find({ email: req.body.email }).populate({ path: "wishList", populate: { path: "regMembers" } }).sort({ createdAt: -1 })
             .then((data) => {
                 res.json(data[0])
             })
             .catch((err) => res.json({ error: "could not get saveditems", err }));
-} catch (err) {
-    res.status(400).json({ error: "could not save items", err });
-}
+    } catch (err) {
+        res.status(400).json({ error: "could not save items", err });
+    }
 }
 
 const removeSaved = async (req, res) => {
     try {
-        Profile.findOneAndUpdate({ email: req.body.username }, { $pull: { wishList: req.body.id } })
+        Profile.findOneAndUpdate({ email: req.body.email }, { $pull: { wishList: req.body.id } })
             .then((data) => res.json(data))
             .catch((err) => res.json({ error: "could not delete saveditems", err }));
     } catch (err) {
