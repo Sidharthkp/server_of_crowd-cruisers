@@ -20,7 +20,7 @@ router.post("/showMembers", showMembers)
 
 router.post("/showJoinedMembers", membersParticipated)
 
-router.post("/editImage", single, editDp)
+router.post("/editImage", single, emailSanitizer, editDp)
 
 router.post("/profileEdit", profileEdit)
 

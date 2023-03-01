@@ -94,7 +94,6 @@ const image = async (req, res) => {
 }
 
 const newGroup = async (req, res) => {
-    console.log(req.body);
     const newgroup = new Group({
         admin: req.body.adminName,
         groupName: req.body.roomName,
