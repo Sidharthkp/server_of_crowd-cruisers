@@ -1,24 +1,26 @@
 //js
 const express = require('express');
 
+const authenticate = require('../middlewares/FirebaseAdmin')
+
 const { newGroup, getGroups, joinGroup, openGroup, messages, editGrpDp, image, single, getGroupsList } = require('../controllers/groupController');
 
 const router = express.Router();
 
 router.use("/image", image)
 
-router.post('/create', newGroup);
+router.post('/create', authenticate,  newGroup);
 
-router.post('/join', joinGroup);
+router.post('/join', authenticate, joinGroup);
 
-router.post('/open', openGroup);
+router.post('/open', authenticate, openGroup);
 
-router.post('/message', messages);
+router.post('/message', authenticate, messages);
 
-router.post('/editImage', single, editGrpDp);
+router.post('/editImage', single, authenticate, editGrpDp);
 
-router.get('/get', getGroups);
+router.get('/get', authenticate, getGroups);
 
-router.post('/getGroup', getGroupsList);
+router.post('/getGroup', authenticate, getGroupsList);
 
 module.exports = router;
