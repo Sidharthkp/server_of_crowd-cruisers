@@ -3,7 +3,7 @@ const express = require('express');
 
 const authenticate = require('../middlewares/FirebaseAdmin')
 
-const { newGroup, getGroups, joinGroup, openGroup, messages, editGrpDp, image, single, getGroupsList } = require('../controllers/groupController');
+const { newGroup, getGroups, joinGroup, openGroup, messages, editGrpDp, image, single, getGroupsList, editGrpName } = require('../controllers/groupController');
 
 const router = express.Router();
 
@@ -18,6 +18,8 @@ router.post('/open', authenticate, openGroup);
 router.post('/message', authenticate, messages);
 
 router.post('/editImage', single, authenticate, editGrpDp);
+
+router.post('/editGroupName', authenticate, editGrpName);
 
 router.get('/get', authenticate, getGroups);
 

@@ -188,6 +188,25 @@ const editGrpDp = async (req, res) => {
     }
 }
 
+const editGrpName = async (req, res) => {
+    try {
+        Group.findOneAndUpdate(
+            {
+                _id: req.body.id
+            },
+            {
+                $set: {
+                    groupName: req.body.grpName
+                }
+            }
+        )
+            .then((data) => res.json(data))
+            .catch((err) => res.json({ error: "could not edit grp name", err }));
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
 module.exports = {
     newGroup,
     getGroups,
@@ -197,5 +216,6 @@ module.exports = {
     editGrpDp,
     image,
     single,
-    getGroupsList
+    getGroupsList,
+    editGrpName
 }
