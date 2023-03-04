@@ -3,9 +3,9 @@ const userModel = require("../models/User");
 
 const authenticate =  async (req, res, next) => {
     try {
-        let firebaseToken = req.headers.authorization?.split(" ")[1];
+        let firebaseToken = req.headers?.authorization?.split(" ")[1];
         if (firebaseToken === undefined) {
-            firebaseToken = req.body.headers.authorization?.split(" ")[1];
+            firebaseToken = req.body.headers?.authorization?.split(" ")[1];
         }
 
         let firebaseUser;
