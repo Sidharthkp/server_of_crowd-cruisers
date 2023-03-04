@@ -1,4 +1,6 @@
 var admin = require("firebase-admin");
+const dotenv = require("dotenv");
+dotenv.config()
 
 const serviceAccount = {
     "type": process.env.TYPE,
