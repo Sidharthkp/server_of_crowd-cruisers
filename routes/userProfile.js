@@ -12,7 +12,7 @@ router.use("/image", image)
 
 router.get("/showJoinedEventsRides", authenticate, showJoinedEventsRides)
 
-router.post("/addNew", authenticate, addNew)
+router.post("/addNew", addNew)
 
 router.post("/showProfile", emailSanitizer, authenticate, showProfile)
 
